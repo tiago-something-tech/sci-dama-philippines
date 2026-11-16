@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fafafa">
+  <meta name="description" content="Scientific-notation Sci-Dama practice for student competitors. Two players, automatic scoring, and move records.">
+  <title>Sci Dama — Scientific-notation practice</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="engine.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <a href="./" class="wordmark" aria-label="Sci Dama home"><span class="brand-mark">×</span> sci<span>dama</span><span class="edition">SCIENTIFIC NOTATION</span></a>
+  </header>
+  <main>
+    <section id="home-screen" class="home-screen" aria-labelledby="menu-title">
+      <div class="hero-art" aria-hidden="true"><div class="hero-board" id="hero-board"></div><span class="art-label">SCIENTIFIC NOTATION / SCI DAMA</span></div>
+      <nav class="main-menu" aria-label="Main menu">
+        <p class="eyebrow">SCIENTIFIC NOTATION</p><h1 id="menu-title" tabindex="-1">Sci Dama</h1><p class="menu-description">Practice for your next match.</p>
+        <button class="menu-button resume-button" id="resume-button" hidden>Resume match <span aria-hidden="true">↗</span></button>
+        <button class="menu-button menu-primary" id="play-button" aria-expanded="false" aria-controls="play-options">Play <span aria-hidden="true">↗</span></button>
+        <div id="play-options" class="play-options" hidden>
+          <fieldset><legend>Choose a mode</legend>
+            <label class="mode-option"><input type="radio" name="mode" value="pvp" checked><span><strong>PvP</strong><small>2 players · Pass and play</small></span></label>
+            <label class="mode-option"><input type="radio" name="mode" value="ai"><span><strong>PvAI</strong><small>Player vs computer</small></span></label>
+            <label class="mode-option"><input type="radio" name="mode" value="playground"><span><strong>Playground</strong><small>Play both sides and test moves</small></span></label>
+          </fieldset>
+          <div id="ai-setting" class="ai-setting" hidden><label for="ai-level">Choose your opponent</label><select id="ai-level"><option value="dumbledore">Dumbledore · Easy</option><option value="joe" selected>Joe · Medium</option><option value="magnus">Magnus · Hard</option></select><p class="setup-note" id="ai-description">Looks two moves ahead for each side.</p><label for="ai-order">Your turn order</label><select id="ai-order"><option value="red" selected>First · Red</option><option value="blue">Second · Blue</option></select></div>
+          <label class="timer-setting" id="timer-setting"><span>Move timer<small>1 minute each move</small></span><input id="timer-toggle" type="checkbox" role="switch"><span class="switch-state" aria-hidden="true">OFF</span></label>
+          <p class="setup-note" id="timer-note">Board flips automatically after each PvP turn.</p>
+          <button class="primary-button" id="start-button">Start game</button>
+        </div>
+        <button class="menu-button" id="rules-button">How to Play <span aria-hidden="true">↗</span></button>
+        <button class="menu-button" id="changelog-button">Changelogs <span aria-hidden="true">↗</span></button>
+        <button class="menu-button" id="credits-button">Credits <span aria-hidden="true">↗</span></button>
+      </nav>
+    </section>
+    <section id="game-screen" hidden aria-label="Match">
+    <div class="match-toolbar"><button class="text-button" id="menu-button">← Main menu</button><span id="mode-label">PvP · Pass and play</span><span id="move-clock" class="move-clock" role="timer" aria-label="Move time remaining" hidden>1:00</span></div>
+    <div id="ai-panel" class="ai-panel" hidden><p id="ai-status" role="status" aria-live="polite"></p><button id="ai-retry" class="small-button" hidden>Retry opponent</button></div>
+    <section class="game-layout" aria-label="Sci-Dama game">
+      <div class="board-column">
+        <div class="board-heading"><div><span class="live-dot" id="turn-dot"></span><strong id="turn-title" tabindex="-1">Red to move</strong><span id="turn-count">Turn 1</span></div><button class="small-button" id="flip-button" aria-label="Flip the board">↻ <span>Flip board</span></button></div>
+        <div class="board-shell"><div id="board" class="board" role="group" aria-label="Sci-Dama board"></div><div id="rank-labels" class="rank-labels" aria-hidden="true"></div><div id="file-labels" class="file-labels" aria-hidden="true"></div></div>
+        <div class="visually-hidden" id="message" role="status" aria-live="polite">Choose a red chip to begin.</div>
+        <details class="chip-key"><summary>Meet your chips <span>12 values in scientific notation</span></summary><div id="chip-values"></div></details>
+      </div>
+      <aside class="sidebar">
+        <section class="score-panel" aria-label="Live scores"><div class="section-label">THE SCOREBOARD <span>LOWER WINS</span></div><div id="scores"></div><p class="score-footnote">Running totals · Remaining chips are added at the end.</p></section>
+        <section class="history-panel" aria-label="Move history"><div class="history-header"><h2>Move history</h2><span id="move-badge">0</span></div><div id="history" class="history-list"></div></section>
+        <div class="game-actions"><button class="secondary-button" id="undo-button">↶ Undo turn</button><button class="secondary-button" id="export-button">↓ Save record</button><button class="secondary-button" id="finish-button">Finish & score</button><button class="secondary-button" id="new-button">New game</button></div>
+        <p class="storage-error" id="save-status" role="status" hidden></p>
+      </aside>
+    </section>
+    </section>
+    <footer><span>v0.3.1</span></footer>
+  </main>
+  <dialog id="rules-dialog" class="info-dialog" aria-labelledby="rules-title"><div class="dialog-heading"><p class="eyebrow">THE BASICS</p><button class="close-button" data-close="rules-dialog" aria-label="Close rules">×</button></div><h2 id="rules-title">How to play</h2><p>Red starts. Play another person in PvP, the computer in PvAI, or both sides in Playground. The lower final score wins.</p><p>In PvAI, choose First (Red) or Second (Blue). Red always opens; if you choose Blue, the computer moves first. The board stays facing your side. Dumbledore deliberately chooses poor moves; Joe aims to look two moves ahead for each side; Magnus searches deeper within a thinking-time limit. Magnus is our strongest level, not guaranteed unbeatable. PvAI is untimed. Undo takes back your move and the computer’s reply.</p><ol><li><strong>Move diagonally.</strong> Ordinary chips move one square forward and capture forward or backward. A dama travels along an open diagonal.</li><li><strong>Captures are compulsory.</strong> If a dama can capture, it takes priority over every ordinary chip. Within the same class, you must take the path capturing the most pieces.</li><li><strong>Score on landing.</strong> Apply the landing square’s operation to the capturing chip’s value first and the captured chip’s value second. Each jump is scored separately using the chip’s original value.</li><li><strong>Dama changes the score.</strong> Multiply a capture result by 2 if either chip is dama, or by 4 if both are dama.</li><li><strong>Finish and compare.</strong> Add the values of each player’s remaining chips to their running total. Lower wins. A move without a capture adds no points.</li></ol><details open><summary>Practice-version decisions</summary><p>PvP flips the board after each completed turn. Playground lets you play both sides with manual board flipping. The optional PvP timer allows one minute for the entire turn, including multiple captures. Returning to the main menu pauses the timer. When time runs out, play pauses for player review; no winner is assigned automatically. Promotion occurs after the complete turn. Captured pieces are removed immediately. Equal-class, equal-count paths are both allowed. Remaining dama values are counted once. These edge cases need your review before tournament use.</p><p>Repetition does not end a game automatically. Use “Finish & score” when both players agree. Having no legal move ends play and compares final scores.</p></details><p class="numeric-note">Calculations and comparisons use exact fractions internally. The display shows up to 15 significant digits; ≈ marks a shortened result. Open a move’s calculation to see its exact value.</p><a href="https://tsoktok.blogspot.com/2011/09/dama-sci-notation.html" target="_blank" rel="noopener noreferrer">Original board and rules reference ↗</a></dialog>
+  <dialog id="changelog-dialog" aria-labelledby="changelog-title"><div class="dialog-heading"><p class="eyebrow">VERSION HISTORY</p><button class="close-button" data-close="changelog-dialog" aria-label="Close changelogs">×</button></div><h2 id="changelog-title">Changelogs</h2><article class="release"><h3>v0.3.1 <small>November 16, 2026</small></h3><ul><li>Choose to move first as Red or second as Blue in PvAI.</li><li>The computer opens when you choose second; the board faces your side.</li><li>Turn order persists in saved matches and game records. Undo returns to your previous decision.</li></ul></article><article class="release"><h3>v0.3.0 <small>November 16, 2026</small></h3><ul><li>PvAI with Dumbledore, Joe, and Magnus opponents.</li><li>Local background search with exact score comparisons. No AI service or account needed.</li><li>Fixed human-facing board, decision-level undo, and resumable computer turns.</li><li>Computer thinking cancels safely when leaving, undoing, or finishing.</li><li>Bounded search strength; Magnus is the strongest level, not unbeatable.</li></ul></article><article class="release"><h3>v0.2.0 <small>November 16, 2026</small></h3><ul><li>Main menu with an animated board preview on desktop.</li><li>PvP pass and play with automatic board flipping.</li><li>Optional one-minute move timer with a pause on expiry.</li><li>Playground mode for playing both sides. PvAI marked as coming soon.</li><li>How to Play, Changelogs, and Credits in the main menu.</li><li>Black and white board, neutral background, and Geist throughout.</li><li>Version number in the footer; routine save notice removed.</li><li>Existing matches can be resumed from the menu.</li></ul></article><article class="release"><h3>v0.1.0 <small>November 16, 2026</small></h3><p>Local two-player game with exact scoring, compulsory captures, move history, save records, and undo. Initial interface refinement for student competitors.</p></article></dialog>
+  <dialog id="credits-dialog" aria-labelledby="credits-title"><div class="dialog-heading"><p class="eyebrow">ABOUT THIS PROJECT</p><button class="close-button" data-close="credits-dialog" aria-label="Close credits">×</button></div><h2 id="credits-title">Credits</h2><p>This web app is developed using Codex.</p><p>Ideation by <strong>Engr. James Vincent Aves</strong>, former Sci-Dama player for:</p><ul><li>Cahagnaan Elementary School (2012–2014)</li><li>Bato School of Fisheries (2016–2019)</li></ul></dialog>
+  <dialog id="timeout-dialog" aria-labelledby="timeout-title"><p class="eyebrow">MOVE TIMER</p><h2 id="timeout-title">Time is up.</h2><p id="timeout-copy"></p><p>Play is paused for review. Continue the same turn with a fresh minute, or finish and compare scores.</p><div class="dialog-actions"><button class="secondary-button" id="timeout-finish">Finish & score</button><button class="primary-button" id="timeout-continue">Continue turn</button></div></dialog>
+  <dialog id="confirm-dialog" aria-labelledby="confirm-title" class="confirm-dialog"><h2 id="confirm-title"></h2><p id="confirm-copy"></p><div class="dialog-actions"><button class="secondary-button" data-close="confirm-dialog">Keep playing</button><button class="primary-button" id="confirm-action">Continue</button></div></dialog>
+  <dialog id="result-dialog" class="result-dialog" aria-labelledby="result-title"><div class="dialog-heading"><p class="eyebrow">FINAL SCORES</p><button class="close-button" data-close="result-dialog" aria-label="Close result">×</button></div><h2 id="result-title"></h2><p id="result-reason"></p><div id="result-scores"></div><p class="numeric-note">Final score = running score + remaining chip values.<br>Exact values determine the winner, including close scores.</p><div class="dialog-actions"><button class="secondary-button" id="result-export">↓ Save record</button><button class="primary-button" data-close="result-dialog">Review board</button></div></dialog>
+</body>
+</html>
